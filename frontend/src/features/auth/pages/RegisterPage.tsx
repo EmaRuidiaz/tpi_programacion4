@@ -31,7 +31,12 @@ export function RegisterPage() {
     },
     onSubmit: async ({ value }) => {
       setServerError(null);
-      await mutation.mutateAsync(value);
+      await mutation.mutateAsync({
+        username: value.username.trim(),
+        full_name: value.full_name.trim(),
+        email: value.email.trim().toLowerCase(),
+        password: value.password,
+      });
     },
   });
 
@@ -71,6 +76,8 @@ export function RegisterPage() {
             {(field) => (
               <Input
                 id="username"
+                name="username"
+                autoComplete="username"
                 label="Nombre de usuario"
                 placeholder="ej: juanperez"
                 value={field.state.value}
@@ -93,6 +100,8 @@ export function RegisterPage() {
             {(field) => (
               <Input
                 id="full_name"
+                name="full_name"
+                autoComplete="name"
                 label="Nombre completo"
                 placeholder="Juan Pérez"
                 value={field.state.value}
@@ -115,7 +124,9 @@ export function RegisterPage() {
             {(field) => (
               <Input
                 id="email"
+                name="email"
                 type="email"
+                autoComplete="email"
                 label="Correo electrónico"
                 placeholder="juan@ejemplo.com"
                 value={field.state.value}
@@ -138,7 +149,9 @@ export function RegisterPage() {
             {(field) => (
               <Input
                 id="password"
+                name="password"
                 type="password"
+                autoComplete="new-password"
                 label="Contraseña"
                 placeholder="Mínimo 8 caracteres"
                 value={field.state.value}

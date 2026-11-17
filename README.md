@@ -9,7 +9,7 @@ Aplicación web completa para la gestión de pedidos de un local gastronómico c
 ## Enlaces de Entrega
 
 - **Repositorio GitHub**: https://github.com/EmaRuidiaz/tpi_programacion4.git
-- **Video de demostración**: `https://youtu.be/enlace-del-video` *(reemplazar con el link público del video)*
+- **Video de demostración**: https://drive.google.com/file/d/1at9r7laimzqTUtM5U3urosZp3iDyguDH/view?usp=sharing
 
 ---
 

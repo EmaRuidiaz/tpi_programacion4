@@ -11,21 +11,25 @@ class AuthService:
         self.uow = uow
 
     def register(self, data: UserCreate) -> UserPublic:
+        username = data.username.strip()
+        full_name = data.full_name.strip()
+        email = data.email.strip().lower()
+
         with self.uow as uow:
-            if uow.usuarios.get_by_username(data.username):
+            if uow.usuarios.get_by_username(username):
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
                     detail="El nombre de usuario ya está registrado",
                 )
-            if uow.usuarios.get_by_email(data.email):
+            if uow.usuarios.get_by_email(email):
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
                     detail="El correo electrónico ya está registrado",
                 )
             nuevo = Usuario(
-                username=data.username,
-                full_name=data.full_name,
-                email=data.email,
+                username=username,
+                full_name=full_name,
+                email=email,
                 hashed_password=get_password_hash(data.password),
                 role="user",
                 disabled=False,
@@ -34,8 +38,11 @@ class AuthService:
             return UserPublic.model_validate(nuevo)
 
     def login(self, username: str, password: str) -> str:
+        identificador = username.strip()
         with self.uow as uow:
-            usuario = uow.usuarios.get_by_username(username)
+            usuario = uow.usuarios.get_by_username(identificador)
+            if not usuario:
+                usuario = uow.usuarios.get_by_email(identificador)
             if not usuario or not verify_password(password, usuario.hashed_password):
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,

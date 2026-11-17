@@ -1,5 +1,6 @@
 from typing import Optional
 
+from sqlalchemy import func
 from sqlmodel import Session, select
 
 from app.core.base_repository import BaseRepository
@@ -11,9 +12,11 @@ class UsuarioRepository(BaseRepository[Usuario]):
         super().__init__(session, Usuario)
 
     def get_by_username(self, username: str) -> Optional[Usuario]:
-        statement = select(Usuario).where(Usuario.username == username)
+        normalized = username.strip().lower()
+        statement = select(Usuario).where(func.lower(Usuario.username) == normalized)
         return self.session.exec(statement).first()
 
     def get_by_email(self, email: str) -> Optional[Usuario]:
-        statement = select(Usuario).where(Usuario.email == email)
+        normalized = email.strip().lower()
+        statement = select(Usuario).where(func.lower(Usuario.email) == normalized)
         return self.session.exec(statement).first()

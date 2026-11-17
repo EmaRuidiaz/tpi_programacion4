@@ -20,7 +20,10 @@ export function LoginPage() {
     onSubmit: async ({ value }) => {
       setServerError(null);
       try {
-        const user = await login(value);
+        const user = await login({
+          username: value.username.trim(),
+          password: value.password,
+        });
         if (user.role === 'admin') {
           navigate('/admin/resumen');
         } else {
@@ -60,14 +63,16 @@ export function LoginPage() {
             name="username"
             validators={{
               onChange: ({ value }) =>
-                !value.trim() ? 'El usuario es obligatorio' : undefined,
+                !value.trim() ? 'El usuario o correo es obligatorio' : undefined,
             }}
           >
             {(field) => (
               <Input
                 id="username"
-                label="Usuario"
-                placeholder="Tu nombre de usuario"
+                name="username"
+                autoComplete="username"
+                label="Usuario o correo electrónico"
+                placeholder="Tu nombre de usuario o email"
                 value={field.state.value}
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
@@ -86,7 +91,9 @@ export function LoginPage() {
             {(field) => (
               <Input
                 id="password"
+                name="password"
                 type="password"
+                autoComplete="current-password"
                 label="Contraseña"
                 placeholder="••••••••"
                 value={field.state.value}
